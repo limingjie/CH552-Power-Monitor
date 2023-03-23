@@ -8,15 +8,6 @@
 #include <gpio.h>
 #include <buzzer.h>
 
-// All key pins are pulled up.
-// - A key is pressed if the input bit changes from 1 to 0.
-// - A key is released if the input bit changes from 0 to 1.
-// - A key is down if the input bit is 0.
-// #define KEY_PRESSED(KEY)  ((lastKeyState & (1 << (KEY))) && !(P1 & (1 << (KEY))))
-// #define KEY_RELEASED(KEY) (!(lastKeyState & (1 << (KEY))) && (P1 & (1 << (KEY))))
-// #define KEY_DOWN(KEY)     (!(P1 & (1 << (KEY))))
-// #define DEBOUNCE_INTERVAL 8  // 8 ms
-
 #define SHUNT0_EN P30
 #define SHUNT1_EN P31
 #define SHUNT2_EN P32
@@ -26,7 +17,6 @@
 #define ENCODER_SW  P34
 uint8_t encoder_value = 0;
 
-// __xdata const uint8_t warningSound[] = {3, C4, 2, C4, 2, C4, 2};
 __xdata const uint8_t warningSound[] = {1, C4, 1};
 
 // https://forum.arduino.cc/t/reading-rotary-encoders-as-a-state-machine/937388
@@ -39,7 +29,7 @@ uint8_t process_encoder()
     {
         case 0:  // Idle state, encoder not turning
             if (!CLKstate)
-            {    // Turn clockwise and CLK goes low first
+            {  // Turn clockwise and CLK goes low first
                 state = 1;
             }
             else if (!DTstate)
@@ -105,39 +95,33 @@ void startup()
     PIN_input_PU(ENCODER_DT);
     PIN_input_PU(ENCODER_SW);
 
-    // Shunt selection pins
-    // SHUNT0_EN - Shunt 0
-    // SHUNT1_EN - Shunt 1
+    // Enable shunt 0 by default
     PIN_output(SHUNT0_EN);
-    PIN_high(SHUNT0_EN);
     PIN_output(SHUNT1_EN);
-    PIN_low(SHUNT1_EN);
     PIN_output(SHUNT2_EN);
+    PIN_high(SHUNT0_EN);
+    PIN_low(SHUNT1_EN);
     PIN_low(SHUNT2_EN);
 
     initTimer();
+    initBuzzer();
 
     INA219_init();
     OLED_init();
-
-    initBuzzer();
 }
 
 void main()
 {
-    __xdata char   buf[25];
-    __xdata int8_t recalibrate = 0;
-    // __xdata uint32_t count            = 0;
+    __xdata char    buf[25];
+    __xdata int8_t  recalibrate      = 0;
     __data uint32_t last_system_time = 0;
-
-    // int32_t  last_shunt_voltage_uV = -1;
-    __data int32_t last_bus_voltage_mV = -1;
-    __data int32_t last_power_uW       = -1;
-    __data int32_t last_current_uA     = -1;
-    __data int32_t shunt_voltage_uV;
-    __data int32_t bus_voltage_mV;
-    __data int32_t power_uW;
-    __data int32_t current_uA;
+    __data int32_t  shunt_voltage_uV;
+    __data int32_t  last_bus_voltage_mV = -1;
+    __data int32_t  last_power_uW       = -1;
+    __data int32_t  last_current_uA     = -1;
+    __data int32_t  bus_voltage_mV;
+    __data int32_t  power_uW;
+    __data int32_t  current_uA;
 
     // Shunt resistor 0 = 0.1 Ω
     // Shunt resistor 1 =   1 Ω
@@ -152,8 +136,6 @@ void main()
     OLED_printxy(0, 1, "Voltage          V");
     OLED_printxy(0, 2, "Current          mA");
     OLED_printxy(0, 3, "Power            mW");
-    // OLED_printxy(0, 4, "Shunt            mV");
-    // OLED_printxy(0, 5, "Eq.Res           Ohm");
 
     playBuzzer(warningSound);
 
@@ -161,6 +143,7 @@ void main()
     {
         if (process_encoder())
         {
+            // TODO: functions
             sprintf(buf, "enc = %3u", encoder_value);
             OLED_printxy(0, 7, buf);
         }
@@ -169,10 +152,6 @@ void main()
         {
             last_system_time = millis();
 
-            // uint16_t raw_shunt        = INA219_get_raw_shunt_voltage();
-            // uint16_t raw_bus_voltage  = INA219_get_raw_bus_voltage();
-            // uint16_t raw_power        = INA219_get_raw_power();
-            // uint16_t raw_current      = INA219_get_raw_current();
             shunt_voltage_uV = INA219_get_shunt_voltage_uV();
             bus_voltage_mV   = INA219_get_bus_voltage_mV();
             power_uW         = INA219_get_power_uW();
@@ -180,30 +159,28 @@ void main()
 
             if (shunt_voltage_uV != 0 && current_uA == 0)
             {
-                delay(100);
                 INA219_init();
+                delay(100);
                 recalibrate++;
                 continue;
             }
 
-            if (low_volt == 1 && bus_voltage_mV >= 1200)
+            if (low_volt == 1 && bus_voltage_mV >= 1500)
             {
                 low_volt = 0;
             }
 
-            if (bus_voltage_mV < 1000 || current_uA < 0)
+            if (bus_voltage_mV < 1200 || current_uA < 0)
             {
                 low_volt = 1;
                 OLED_printxy(8, 1, "       -");
                 OLED_printxy(8, 2, "       -");
                 OLED_printxy(8, 3, "       -");
-                // OLED_printxy(8, 4, "       -");
-                // OLED_printxy(8, 5, "       -");
-                // last_shunt_voltage_uV = -1;
                 last_bus_voltage_mV = -1;
                 last_power_uW       = -1;
                 last_current_uA     = -1;
 
+                // Reset to shunt 0
                 if (shunt != 0)
                 {
                     PIN_high(SHUNT0_EN);
@@ -216,8 +193,8 @@ void main()
 
             if (!low_volt)
             {
-                // Switch from shunt 0 to shunt 1 if current is less than 20 mA
-                if (current_uA <= 20000 && shunt == 0)
+                // Switch from shunt 0 to shunt 1 if current is <= 100 mA
+                if (current_uA <= 100000 && shunt == 0)
                 {
                     PIN_high(SHUNT1_EN);
                     PIN_low(SHUNT0_EN);
@@ -225,7 +202,7 @@ void main()
                     shunt = 1;
                     delay(100);  // Wait for INA219 to get new data
                 }
-                // Switch from shunt 1 to shunt 2 if current is less than 10 mA
+                // Switch from shunt 1 to shunt 2 if current is <= 10 mA
                 if (current_uA <= 10000 && shunt == 1)
                 {
                     PIN_high(SHUNT2_EN);
@@ -234,8 +211,8 @@ void main()
                     shunt = 2;
                     delay(100);  // Wait for INA219 to get new data
                 }
-                // Switch from shunt 1 to shunt 0 if current is greater than 25 mA
-                if (current_uA > 25000 && shunt == 1)
+                // Switch from shunt 1 to shunt 0 if current is > 105 mA
+                if (current_uA > 105000 && shunt == 1)
                 {
                     PIN_high(SHUNT0_EN);
                     PIN_low(SHUNT1_EN);
@@ -243,7 +220,7 @@ void main()
                     shunt = 0;
                     delay(100);  // Wait for INA219 to get new data
                 }
-                // Switch from shunt 2 to shunt 1 if current is greater than 15 mA
+                // Switch from shunt 2 to shunt 1 if current is > 15 mA
                 if (current_uA > 15000 && shunt == 2)
                 {
                     PIN_high(SHUNT1_EN);
@@ -273,29 +250,10 @@ void main()
                     OLED_printxy(8, 3, buf);
                     last_power_uW = power_uW;
                 }
-
-                // if (shunt_voltage_uV != last_shunt_voltage_uV)
-                // {
-                //     sprintf(buf, "%4ld.%03ld", shunt_voltage_uV / 1000, shunt_voltage_uV % 1000);
-                //     OLED_printxy(8, 4, buf);
-                //     last_shunt_voltage_uV = shunt_voltage_uV;
-                // }
-
-                // if (current_uA != 0)
-                // {
-                //     int32_t eqr_mOhm = (float)bus_voltage_mV * 1e6 / (float)current_uA;
-                //     sprintf(buf, "%7ld.%01ld", eqr_mOhm / 1000, (eqr_mOhm / 100) % 10);
-                //     OLED_printxy(7, 5, buf);
-                // }
-                // else
-                // {
-                //     OLED_printxy(7, 5, "        -");
-                // }
             }
 
             sprintf(buf, "Recal=%d Shunt=%d", recalibrate, shunt);
             OLED_printxy(0, 6, buf);
-            // sprintf(buf, "FRM=%lu FPS=%03lu", count++, count * 1000 / millis());
         }
     }
 }
