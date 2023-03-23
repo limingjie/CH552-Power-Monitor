@@ -50,8 +50,8 @@ void playBuzzer(__xdata const uint8_t* __xdata melody)
     const uint8_t length = *melody++;
     for (uint8_t note = 0; note < length; note++)
     {
-        uint8_t  waves  = NOTES_WAVES_IN_100ms[*melody];    // The number of waves in 100ms.
-        uint16_t _delay = NOTES_HALF_PERIOD_us[*melody++];  // The half period of the wave.
+        uint8_t  waves    = NOTES_WAVES_IN_100ms[*melody];    // The number of waves in 100ms.
+        uint16_t delay_us = NOTES_HALF_PERIOD_us[*melody++];  // The half period of the wave.
         // The 2 while loops play the note waves x beats times, which last 100ms x beats.
         while (waves--)
         {
@@ -59,9 +59,9 @@ void playBuzzer(__xdata const uint8_t* __xdata melody)
             while (beats--)
             {
                 BUZZER = 1;
-                delayMicroseconds(_delay);
+                delayMicroseconds(delay_us);
                 BUZZER = 0;
-                delayMicroseconds(_delay);
+                delayMicroseconds(delay_us);
             }
         }
 
