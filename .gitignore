@@ -12,3 +12,6 @@
 *.ihx
 *.hex
 *.bin
+
+# macOS
+.DS_Store

@@ -17,8 +17,6 @@
 // #define KEY_DOWN(KEY)     (!(P1 & (1 << (KEY))))
 // #define DEBOUNCE_INTERVAL 8  // 8 ms
 
-#define INA219_ADDR 0x45
-
 #define SHUNT0_EN P30
 #define SHUNT1_EN P31
 #define SHUNT2_EN P32
@@ -119,7 +117,7 @@ void startup()
 
     initTimer();
 
-    INA219_init(INA219_ADDR);
+    INA219_init();
     OLED_init();
 
     initBuzzer();
@@ -170,19 +168,19 @@ void main()
         {
             last_system_time = millis();
 
-            // uint16_t raw_shunt        = INA219_get_raw_shunt_voltage(INA219_ADDR);
-            // uint16_t raw_bus_voltage  = INA219_get_raw_bus_voltage(INA219_ADDR);
-            // uint16_t raw_power        = INA219_get_raw_power(INA219_ADDR);
-            // uint16_t raw_current      = INA219_get_raw_current(INA219_ADDR);
-            shunt_voltage_uV = INA219_get_shunt_voltage_uV(INA219_ADDR);
-            bus_voltage_mV   = INA219_get_bus_voltage_mV(INA219_ADDR);
-            power_uW         = INA219_get_power_uW(INA219_ADDR);
-            current_uA       = INA219_get_current_uA(INA219_ADDR);
+            // uint16_t raw_shunt        = INA219_get_raw_shunt_voltage();
+            // uint16_t raw_bus_voltage  = INA219_get_raw_bus_voltage();
+            // uint16_t raw_power        = INA219_get_raw_power();
+            // uint16_t raw_current      = INA219_get_raw_current();
+            shunt_voltage_uV = INA219_get_shunt_voltage_uV();
+            bus_voltage_mV   = INA219_get_bus_voltage_mV();
+            power_uW         = INA219_get_power_uW();
+            current_uA       = INA219_get_current_uA();
 
             if (shunt_voltage_uV != 0 && current_uA == 0)
             {
                 delay(100);
-                INA219_init(INA219_ADDR);
+                INA219_init();
                 recalibrate++;
                 continue;
             }

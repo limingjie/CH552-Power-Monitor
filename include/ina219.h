@@ -144,16 +144,18 @@
 //    3.2 A x 3.2 A x 0.1 Ω = 1.024 W
 //
 
-void INA219_init(uint8_t addr);
+#define INA219_ADDR ((uint8_t)0x45 << 1)
 
-uint16_t INA219_get_raw_shunt_voltage(uint8_t addr);
-uint16_t INA219_get_raw_bus_voltage(uint8_t addr);
-uint16_t INA219_get_raw_power(uint8_t addr);
-uint16_t INA219_get_raw_current(uint8_t addr);
+void INA219_init();
 
-int32_t INA219_get_shunt_voltage_uV(uint8_t addr);
-int32_t INA219_get_bus_voltage_mV(uint8_t addr);
-int32_t INA219_get_power_uW(uint8_t addr);
-int32_t INA219_get_current_uA(uint8_t addr);
+uint16_t INA219_get_raw_shunt_voltage();
+uint16_t INA219_get_raw_bus_voltage();
+uint16_t INA219_get_raw_power();
+uint16_t INA219_get_raw_current();
+
+int32_t INA219_get_shunt_voltage_uV();
+int32_t INA219_get_bus_voltage_mV();
+int32_t INA219_get_power_uW();
+int32_t INA219_get_current_uA();
 
 void INA219_switch_shunt(uint8_t shunt);
