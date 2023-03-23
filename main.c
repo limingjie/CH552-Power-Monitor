@@ -32,9 +32,9 @@ __xdata const uint8_t warningSound[] = {1, C4, 1};
 // https://forum.arduino.cc/t/reading-rotary-encoders-as-a-state-machine/937388
 uint8_t process_encoder()
 {
-    static uint8_t state    = 0;
-    uint8_t        CLKstate = PIN_read(ENCODER_CLK);
-    uint8_t        DTstate  = PIN_read(ENCODER_DT);
+    __data static uint8_t state    = 0;
+    __bit                 CLKstate = PIN_read(ENCODER_CLK);
+    __bit                 DTstate  = PIN_read(ENCODER_DT);
     switch (state)
     {
         case 0:  // Idle state, encoder not turning
@@ -125,24 +125,25 @@ void startup()
 
 void main()
 {
-    __xdata char     buf[25];
-    __xdata int8_t   recalibrate      = 0;
-    __xdata uint32_t count            = 0;
-    uint32_t         last_system_time = 0;
+    __xdata char   buf[25];
+    __xdata int8_t recalibrate = 0;
+    // __xdata uint32_t count            = 0;
+    __data uint32_t last_system_time = 0;
 
     // int32_t  last_shunt_voltage_uV = -1;
-    int32_t last_bus_voltage_mV = -1;
-    int32_t last_power_uW       = -1;
-    int32_t last_current_uA     = -1;
-    int32_t shunt_voltage_uV;
-    int32_t bus_voltage_mV;
-    int32_t power_uW;
-    int32_t current_uA;
+    __data int32_t last_bus_voltage_mV = -1;
+    __data int32_t last_power_uW       = -1;
+    __data int32_t last_current_uA     = -1;
+    __data int32_t shunt_voltage_uV;
+    __data int32_t bus_voltage_mV;
+    __data int32_t power_uW;
+    __data int32_t current_uA;
 
     // Shunt resistor 0 = 0.1 Ω
-    // Shunt resistor 1 =  10 Ω
-    uint8_t shunt    = 0;  // Use small shunt resistor by default
-    __bit   low_volt = 0;  // Use small shunt resistor by default
+    // Shunt resistor 1 =   1 Ω
+    // Shunt resistor 2 =  10 Ω
+    __data uint8_t shunt    = 0;  // Use small shunt resistor by default
+    __bit          low_volt = 0;
 
     startup();
 
@@ -298,21 +299,3 @@ void main()
         }
     }
 }
-
-// Benchmark
-// uint16_t a = 0xcccc, b = 0xaaaa, c = 0x5555;
-// uint8_t  d = 0x66, e = 0x77;
-// sprintf(buf, "%05u%05u%05u%03u%03u", a++, b++, c++, d++, e++);
-// OLED_printxy(0, 0, buf);
-// sprintf(buf, "%05u%05u%05u%03u%03u", a++, b++, c++, d++, e++);
-// OLED_printxy(0, 1, buf);
-// sprintf(buf, "%05u%05u%05u%03u%03u", a++, b++, c++, d++, e++);
-// OLED_printxy(0, 2, buf);
-// sprintf(buf, "%05u%05u%05u%03u%03u", a++, b++, c++, d++, e++);
-// OLED_printxy(0, 3, buf);
-// sprintf(buf, "%05u%05u%05u%03u%03u", a++, b++, c++, d++, e++);
-// OLED_printxy(0, 4, buf);
-// sprintf(buf, "%05u%05u%05u%03u%03u", a++, b++, c++, d++, e++);
-// OLED_printxy(0, 5, buf);
-// sprintf(buf, "%05u%05u%05u%03u%03u", a++, b++, c++, d++, e++);
-// OLED_printxy(0, 6, buf);
