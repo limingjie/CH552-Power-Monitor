@@ -14,7 +14,6 @@ CC         = sdcc
 OBJCOPY    = objcopy
 PACK_HEX   = packihx
 WCHISP    ?= python3 -m ch55xtool -f
-# WCHISP   ?= /opt/homebrew/opt/python@3.10/bin/python3.10 -m ch55xtool -f
 
 # Flags
 CFLAGS    := --std-c11 --Werror --opt-code-size -V -mmcs51 --model-small
