@@ -12,32 +12,30 @@ To increase measurement accuracy in different ranges, 3 current sensing shunt re
 | 1   |   1 &Omega; |         1/4W |   &plusmn;1% | 1206    | (8 mA, 100 mA)        | (0.008 V, 0.10 V) |
 | 2   |  10 &Omega; |         1/8W | &plusmn;0.1% | 0805    | [1 mA, 10 mA)         | (0.010 V, 0.10 V) |
 
-## Shunt Resistor Switching
+### Switching Shunt Resistors
 
-P-channel MOSFETs are used to switch the shunt resistors on high-side, the voltage sampling point is placed between the shunt resistor and the the MOSFET to remove the voltage drop on MOSFET, this is important especially for small shunt resistors, such as 0.1 &Omega;.
+P-channel MOSFETs are used to switch the shunt resistors on the high-side, the voltage sampling point is placed between the shunt resistor and the the MOSFET to eliminate the voltage drop on the MOSFET, this is important especially for small shunt resistor like 0.1 &Omega;.
 
-P-channel MOSFET selection,
+#### Equivalent Shunt Resistor Switching Schematic
 
-- `Vds` should be higher than the maximum voltage of the measurement.
-- `Id` should be higher than the maximum current of the measurement.
-- `Vgs` should be as small as possible, so it can measure the current in a low voltage.
+![Equivalent Shunt Resistor Switching Schematic](images/Equivalent_Shunt_Resistor_Switching_Schematic.png)
+
+#### Shunt Resistor Switching and Transition Hysteresis
+
+- When powers up, the smallest shunt resistor is switched on to avoid the risk of high current through the circuit.
+- If the measured current is out of the range of the current shunt resistor, turn on the shunt resistor next to it first and then turn off the current shunt resistor, by doing this the load will not be interrupted.
+- To avoid switching back and force, keep a 20% transition hysteresis.
+
+![Shunt Resistor Transition Hysteresis](images/Shunt_Resistor_Transition_Hysteresis.svg)
+
+#### P-channel MOSFET Selection
+
+- `Vds` should be higher than the maximum voltage to measure.
+- `Id` should be higher than the maximum current to measure.
+- `Vgs(th)` should be as small as possible, so the MOSFET can saturate in a low supply voltage.
 - `Rds(on)` should be small enough to reduce voltage drop to the load.
 
 CJ3401 is selected consider it satisfied the conditions above and its low cost.
-
-The switching strategy,
-
-- By default, the smallest shunt resistor is turned on to avoid the risk of high current through the circuit.
-- If the measured current is out of the range of the current shunt resistor, turn on another shunt resistor and then turn off the current shunt resistor, by doing this the load will not be interrupted.
-
-**Simplified Shunt Resistor Switching Schematic**
-![Simplified Shunt Resistor Switching Schematic](images/Shunt_Resistor_Switching_Simplified_Schematic.png)
-
-## Shunt Resistor Transition Hysteresis
-
-A 20% transition hysteresis is used to avoid switching shunt resistor back and forth.
-
-![Shunt Resistor Transition Hysteresis](images/Shunt_Resistor_Transition_Hysteresis.svg)
 
 ## Schematic
 

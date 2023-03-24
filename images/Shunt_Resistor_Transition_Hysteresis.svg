@@ -7,7 +7,7 @@
    viewBox="0 0 277.17498 68.106007"
    version="1.1"
    id="svg5"
-   inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
+   inkscape:version="1.2.1 (9c6d41e4, 2022-07-14)"
    sodipodi:docname="Shunt_Resistor_Transition_Hysteresis.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -24,11 +24,11 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.64836625"
-     inkscape:cx="502.80223"
-     inkscape:cy="175.05538"
+     inkscape:zoom="0.93254721"
+     inkscape:cx="530.26806"
+     inkscape:cy="143.69246"
      inkscape:window-width="1440"
-     inkscape:window-height="770"
+     inkscape:window-height="768"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="0"
@@ -173,12 +173,12 @@
        sodipodi:nodetypes="ccc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649)"
-       d="M 96.812069,32.095428 V 44.707989 57.320552"
+       d="M 97.17711,32.095428 V 44.707989 57.320552"
        id="path292-1"
        sodipodi:nodetypes="ccc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649-1)"
-       d="M 121.89933,57.320552 V 44.707989 32.095428"
+       d="M 122.17711,57.320552 V 44.707989 32.095428"
        id="path292-1-5"
        sodipodi:nodetypes="ccc" />
     <path
@@ -187,32 +187,32 @@
        id="path292-6"
        sodipodi:nodetypes="ccc" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 272.175,57.320557 H 197.1757 122.1764"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502;stroke-dasharray:0.50199997,2.50999987;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 122.1764,57.320557 h 74.9993 74.9993"
        id="path292-6-5"
        sodipodi:nodetypes="ccc" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.50224399,2.51121998;stroke-dashoffset:0;stroke-opacity:1"
        d="M 47.177101,6.8684816 H 122.1764 197.1757"
        id="path292-6-5-0"
        sodipodi:nodetypes="ccc" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 272.175,32.095428 H 247.17524 222.17547"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 2.51122;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 222.17547,32.095428 H 247.17523 272.175"
        id="path292-6-5-9"
        sodipodi:nodetypes="ccc" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.50224399,2.51121998;stroke-dashoffset:0;stroke-opacity:1"
        d="M 47.177101,32.095428 H 72.176868 97.176635"
        id="path292-6-5-9-7"
        sodipodi:nodetypes="ccc" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.50224399,2.51121998;stroke-dashoffset:0;stroke-opacity:1"
        d="M 197.16112,32.095428 V 44.707989 57.320552"
        id="path292-6-5-9-9"
        sodipodi:nodetypes="ccc" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.50224399,2.51121998;stroke-dashoffset:0;stroke-opacity:1"
        d="M 222.24838,32.095428 V 44.707989 57.320552"
        id="path292-6-5-9-9-3"
        sodipodi:nodetypes="ccc" />
@@ -243,12 +243,12 @@
        sodipodi:nodetypes="ccc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649-33)"
-       d="M 196.822,6.8684816 V 19.481044 32.093606"
+       d="M 197.17611,6.8684816 V 19.481044 32.093606"
        id="path292-1-0"
        sodipodi:nodetypes="ccc" />
     <path
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649-1-2)"
-       d="M 222.52916,32.093606 V 19.481044 6.8684816"
+       d="M 222.24838,32.093606 V 19.481044 6.8684816"
        id="path292-1-5-6"
        sodipodi:nodetypes="ccc" />
     <text
