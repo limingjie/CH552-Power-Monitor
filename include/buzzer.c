@@ -35,7 +35,7 @@ __code const uint8_t NOTES_WAVES_IN_100ms[] = {
     52, 59, 66, 70, 78, 88, 99   // C5 - B5
 };
 
-void initBuzzer()
+void buzzer_init()
 {
     PIN_output(BUZZER_PIN);
     BUZZER = 0;
@@ -45,7 +45,7 @@ void initBuzzer()
 // - melody = [melody length, note_0, note_0_beats, note_1, note_1_beats...]
 //   - a beat last 100ms.
 //   - a 50ms pause is placed between 2 notes.
-void playBuzzer(__xdata const uint8_t* __xdata melody)
+void buzzer_play(__xdata const uint8_t* __xdata melody)
 {
     const uint8_t length = *melody++;
     for (uint8_t note = 0; note < length; note++)

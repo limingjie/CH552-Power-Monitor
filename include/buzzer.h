@@ -20,5 +20,5 @@
 #define A5 12  // Frequency = 880.0000 Hz, Period = 1136.3636 µs
 #define B5 13  // Frequency = 987.7666 Hz, Period = 1012.3849 µs
 
-void initBuzzer();
-void playBuzzer(__xdata const uint8_t* __xdata melody);
+void buzzer_init();
+void buzzer_play(__xdata const uint8_t* __xdata melody);

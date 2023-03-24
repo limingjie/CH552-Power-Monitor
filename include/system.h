@@ -1,5 +1,4 @@
-#ifndef __SYSTEM_H__
-#define __SYSTEM_H__
+#pragma once
 
 #include <ch554.h>
 #include <stdint.h>
@@ -43,5 +42,3 @@ inline void disable_LDO(void)
     SAFE_MOD = 0xAA;
     GLOBAL_CFG |= bLDO3V3_OFF;
 }
-
-#endif  // __SYSTEM_H__

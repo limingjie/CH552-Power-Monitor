@@ -1,5 +1,4 @@
-#ifndef __TIME_H__
-#define __TIME_H__
+#pragma once
 
 #include <ch554.h>
 #include <stdint.h>
@@ -11,7 +10,7 @@ inline volatile uint32_t millis()
     return _SYSTEM_TIME;
 }
 
-inline void initTimer()
+inline void timer_init()
 {
     // Use timer0 to record system time in milliseconds
     // 1. Enable interrupt globally
@@ -29,5 +28,3 @@ inline void initTimer()
 void timer0_interrupt(void) __interrupt(INT_NO_TMR0);
 void delay(uint16_t ms);
 void delayMicroseconds(uint16_t us);
-
-#endif  // __TIME_H__
