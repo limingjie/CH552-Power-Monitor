@@ -29,7 +29,7 @@ uint8_t process_encoder()
     {
         case 0:  // Idle state, encoder not turning
             if (!CLKstate)
-            {  // Turn clockwise and CLK goes low first
+            {    // Turn clockwise and CLK goes low first
                 state = 1;
             }
             else if (!DTstate)
@@ -193,8 +193,8 @@ void main()
 
             if (!low_volt)
             {
-                // Switch from shunt 0 to shunt 1 if current is <= 100 mA
-                if (current_uA <= 100000 && shunt == 0)
+                // Switch from shunt 0 to shunt 1 if current is <= 80 mA
+                if (current_uA <= 80000 && shunt == 0)
                 {
                     PIN_high(SHUNT1_EN);
                     PIN_low(SHUNT0_EN);
@@ -202,8 +202,8 @@ void main()
                     shunt = 1;
                     delay(100);  // Wait for INA219 to get new data
                 }
-                // Switch from shunt 1 to shunt 2 if current is <= 10 mA
-                if (current_uA <= 10000 && shunt == 1)
+                // Switch from shunt 1 to shunt 2 if current is <= 8 mA
+                if (current_uA <= 8000 && shunt == 1)
                 {
                     PIN_high(SHUNT2_EN);
                     PIN_low(SHUNT1_EN);
@@ -211,8 +211,8 @@ void main()
                     shunt = 2;
                     delay(100);  // Wait for INA219 to get new data
                 }
-                // Switch from shunt 1 to shunt 0 if current is > 105 mA
-                if (current_uA > 105000 && shunt == 1)
+                // Switch from shunt 1 to shunt 0 if current is > 100 mA
+                if (current_uA > 100000 && shunt == 1)
                 {
                     PIN_high(SHUNT0_EN);
                     PIN_low(SHUNT1_EN);
@@ -220,8 +220,8 @@ void main()
                     shunt = 0;
                     delay(100);  // Wait for INA219 to get new data
                 }
-                // Switch from shunt 2 to shunt 1 if current is > 15 mA
-                if (current_uA > 15000 && shunt == 2)
+                // Switch from shunt 2 to shunt 1 if current is > 10 mA
+                if (current_uA > 10000 && shunt == 2)
                 {
                     PIN_high(SHUNT1_EN);
                     PIN_low(SHUNT2_EN);

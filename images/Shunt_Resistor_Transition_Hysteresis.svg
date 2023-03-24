@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="277.17499mm"
+   height="68.106003mm"
+   viewBox="0 0 277.17498 68.106007"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
+   sodipodi:docname="Shunt_Resistor_Transition_Hysteresis.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.8338567"
+     inkscape:cx="295.55199"
+     inkscape:cy="190.03666"
+     inkscape:window-width="1440"
+     inkscape:window-height="770"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="marker2649"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1L"
+       markerWidth="8.75"
+       markerHeight="5"
+       viewBox="0 0 8.75 5"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none;stroke-width:0.5"
+         d="M 0,0 -2.5,2.5 6.25,0 -2.5,-2.5 Z"
+         id="path2647" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker2649-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1L"
+       markerWidth="8.75"
+       markerHeight="5"
+       viewBox="0 0 8.75 5"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none;stroke-width:0.5"
+         d="M 0,0 -2.5,2.5 6.25,0 -2.5,-2.5 Z"
+         id="path2647-0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker2649-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1L"
+       markerWidth="8.75"
+       markerHeight="5"
+       viewBox="0 0 8.75 5"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none;stroke-width:0.5"
+         d="M 0,0 -2.5,2.5 6.25,0 -2.5,-2.5 Z"
+         id="path2647-5" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker2649-33"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1L"
+       markerWidth="8.75"
+       markerHeight="5"
+       viewBox="0 0 8.75 5"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none;stroke-width:0.5"
+         d="M 0,0 -2.5,2.5 6.25,0 -2.5,-2.5 Z"
+         id="path2647-7" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker2649-3-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1L"
+       markerWidth="8.75"
+       markerHeight="5"
+       viewBox="0 0 8.75 5"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none;stroke-width:0.5"
+         d="M 0,0 -2.5,2.5 6.25,0 -2.5,-2.5 Z"
+         id="path2647-0-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker2649-1-2"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1L"
+       markerWidth="8.75"
+       markerHeight="5"
+       viewBox="0 0 8.75 5"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none;stroke-width:0.5"
+         d="M 0,0 -2.5,2.5 6.25,0 -2.5,-2.5 Z"
+         id="path2647-5-5" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1"
+       d="M 47.177101,57.320557 H 72.176868 97.176635"
+       id="path292"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649)"
+       d="M 97.176635,57.320557 H 109.67652 122.1764"
+       id="path292-8-0"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649-3)"
+       d="M 122.1764,32.095428 H 109.67652 97.176635"
+       id="path292-8-0-8"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649)"
+       d="M 96.812069,32.095428 V 44.707989 57.320552"
+       id="path292-1"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649-1)"
+       d="M 121.89933,57.320552 V 44.707989 32.095428"
+       id="path292-1-5"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1"
+       d="m 122.1764,32.095428 h 12.49988 12.49989"
+       id="path292-6"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 272.175,57.320557 H 197.1757 122.1764"
+       id="path292-6-5"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 47.177101,6.8684816 H 122.1764 197.1757"
+       id="path292-6-5-0"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 272.175,32.095428 H 247.17524 222.17547"
+       id="path292-6-5-9"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 47.177101,32.095428 H 72.176868 97.176635"
+       id="path292-6-5-9-7"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 197.16112,32.095428 V 44.707989 57.320552"
+       id="path292-6-5-9-9"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:0.502244, 3.01345;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 222.24838,32.095428 V 44.707989 57.320552"
+       id="path292-6-5-9-9-3"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:2.51122, 1.00449;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 147.17617,32.095428 h 12.49988 12.49988"
+       id="path292-6-6"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1"
+       d="m 172.17593,32.095428 h 12.49989 12.49988"
+       id="path292-6-7"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1"
+       d="M 222.17547,6.8684816 H 247.17524 272.175"
+       id="path292-6-1"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649-33)"
+       d="m 197.1757,32.095428 h 12.49988 12.49989"
+       id="path292-8-0-3"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649-3-7)"
+       d="M 222.17547,6.8684816 H 209.67558 197.1757"
+       id="path292-8-0-8-4"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649-33)"
+       d="M 196.822,6.8684816 V 19.481044 32.093606"
+       id="path292-1-0"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-opacity:1;marker-mid:url(#marker2649-1-2)"
+       d="M 222.52916,32.093606 V 19.481044 6.8684816"
+       id="path292-1-5-6"
+       sodipodi:nodetypes="ccc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="97.155479"
+       y="62.762428"
+       id="text5815"
+       transform="scale(0.99552304,1.0044971)"><tspan
+         sodipodi:role="line"
+         id="tspan5813"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="97.155479"
+         y="62.762428">8 mA</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="24.794664"
+       y="58.860287"
+       id="text5815-1"
+       transform="scale(0.99552304,1.0044971)"><tspan
+         sodipodi:role="line"
+         id="tspan5813-2"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="24.794664"
+         y="58.860287">Shunt Resistor 2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="24.794664"
+       y="33.748096"
+       id="text5815-1-3"
+       transform="scale(0.99552304,1.0044971)"><tspan
+         sodipodi:role="line"
+         id="tspan5813-2-9"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="24.794664"
+         y="33.748096">Shunt Resistor 1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="24.794664"
+       y="8.6340885"
+       id="text5815-1-5"
+       transform="scale(0.99552304,1.0044971)"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="24.794664"
+         y="8.6340885"
+         id="tspan6184">Shunt Resistor 0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="122.25869"
+       y="62.762428"
+       id="text5815-3"
+       transform="scale(0.99552304,1.0044971)"><tspan
+         sodipodi:role="line"
+         id="tspan5813-7"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="122.25869"
+         y="62.762428">10mA</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="197.95581"
+       y="62.762428"
+       id="text5815-9"
+       transform="scale(0.99552304,1.0044971)"><tspan
+         sodipodi:role="line"
+         id="tspan5813-5"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="197.95581"
+         y="62.762428">80 mA</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="223.05902"
+       y="62.762428"
+       id="text5815-3-7"
+       transform="scale(0.99552304,1.0044971)"><tspan
+         sodipodi:role="line"
+         id="tspan5813-7-2"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.02244px;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.502244;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         x="223.05902"
+         y="62.762428">100 mA</tspan></text>
+  </g>
+</svg>
