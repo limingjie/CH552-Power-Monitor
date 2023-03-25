@@ -8,16 +8,18 @@
 #include <stdio.h>
 #include <time.h>
 
-__data uint8_t shunt = 0;  // Use the smallest shunt resistor by default
-__data int32_t shunt_voltage_uV;
-__data int32_t last_bus_voltage_mV = -1;
-__data int32_t last_power_uW       = -1;
-__data int32_t last_current_uA     = -1;
-__data int32_t bus_voltage_mV;
-__data int32_t power_uW;
-__data int32_t current_uA;
+__data uint8_t shunt        = 0;  // Use the smallest shunt resistor by default
 __bit          undervoltage = 0;
 __data int8_t  recalibrate  = 0;
+
+__data int32_t shunt_voltage_uV      = 0;
+__data int32_t current_uA            = 0;
+__data int32_t bus_voltage_mV        = 0;
+__data int32_t power_uW              = 0;
+__data int32_t last_shunt_voltage_uV = -1;
+__data int32_t last_current_uA       = -1;
+__data int32_t last_bus_voltage_mV   = -1;
+__data int32_t last_power_uW         = -1;
 
 __xdata char buf[25];
 
@@ -38,9 +40,10 @@ inline void meter_display()
 {
     OLED_clear();
     OLED_printxy(0, 0, "-----Power Meter-----");
-    OLED_printxy(0, 1, "Voltage          V");
-    OLED_printxy(0, 2, "Current          mA");
-    OLED_printxy(0, 3, "Power            mW");
+    OLED_printxy(0, 1, "Voltage            V");
+    OLED_printxy(0, 2, "Current            mA");
+    OLED_printxy(0, 3, "Power              mW");
+    OLED_printxy(0, 4, "Shunt              mV");
 }
 
 void meter_switch_to_shunt(uint8_t to_shunt)
@@ -60,9 +63,10 @@ inline void meter_undervoltage_lockout()
         meter_switch_to_shunt(0);
     }
 
-    last_bus_voltage_mV = -1;
-    last_power_uW       = -1;
-    last_current_uA     = -1;
+    last_shunt_voltage_uV = -1;
+    last_bus_voltage_mV   = -1;
+    last_power_uW         = -1;
+    last_current_uA       = -1;
 
     OLED_printxy(8, 1, "       -");
     OLED_printxy(8, 2, "       -");
@@ -141,6 +145,12 @@ inline void meter_check_shunt()
     }
 }
 
+void print_thousands(uint8_t x, uint8_t y, __xdata int32_t value)
+{
+    sprintf(buf, "%6ld.%03ld", value / 1000, value % 1000);
+    OLED_printxy(x, y, buf);
+}
+
 void meter_run()
 {
     shunt_voltage_uV = INA219_get_shunt_voltage_uV();
@@ -161,23 +171,26 @@ void meter_run()
 
         if (bus_voltage_mV != last_bus_voltage_mV)
         {
-            sprintf(buf, "%4lu.%03lu", bus_voltage_mV / 1000, bus_voltage_mV % 1000);
-            OLED_printxy(8, 1, buf);
+            print_thousands(8, 1, bus_voltage_mV);
             last_bus_voltage_mV = bus_voltage_mV;
         }
 
         if (current_uA != last_current_uA)
         {
-            sprintf(buf, "%4ld.%03ld", current_uA / 1000, current_uA % 1000);
-            OLED_printxy(8, 2, buf);
+            print_thousands(8, 2, current_uA);
             last_current_uA = current_uA;
         }
 
         if (power_uW != last_power_uW)
         {
-            sprintf(buf, "%6ld.%1ld", power_uW / 1000, (power_uW / 100) % 10);
-            OLED_printxy(8, 3, buf);
+            print_thousands(8, 3, power_uW);
             last_power_uW = power_uW;
+        }
+
+        if (shunt_voltage_uV != last_shunt_voltage_uV)
+        {
+            print_thousands(8, 4, shunt_voltage_uV);
+            last_shunt_voltage_uV = shunt_voltage_uV;
         }
     }
 
