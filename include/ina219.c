@@ -55,22 +55,22 @@ void INA219_init()
     INA219_write_word(INA219_CALIBRATION_REGISTER, INA219_CALIBRATION);
 }
 
-uint16_t INA219_get_raw_shunt_voltage()
+inline uint16_t INA219_get_raw_shunt_voltage()
 {
     return INA219_read_word(INA219_SHUNT_VOLTAGE_REGISTER);
 }
 
-uint16_t INA219_get_raw_bus_voltage()
+inline uint16_t INA219_get_raw_bus_voltage()
 {
     return INA219_read_word(INA219_BUS_VOLTAGE_REGISTER);
 }
 
-uint16_t INA219_get_raw_power()
+inline uint16_t INA219_get_raw_power()
 {
     return INA219_read_word(INA219_POWER_REGISTER);
 }
 
-uint16_t INA219_get_raw_current()
+inline uint16_t INA219_get_raw_current()
 {
     return INA219_read_word(INA219_CURRENT_REGISTER);
 }
@@ -82,17 +82,17 @@ int32_t INA219_get_shunt_voltage_uV()
 
 int32_t INA219_get_bus_voltage_mV()
 {
-    return (INA219_get_raw_bus_voltage() >> 3) * (uint32_t)INA219_BUS_VOLTAGE_LSB_mV;
+    return (INA219_get_raw_bus_voltage() >> 3) * (int32_t)INA219_BUS_VOLTAGE_LSB_mV;
 }
 
 int32_t INA219_get_power_uW()
 {
-    return (int32_t)INA219_get_raw_power() * power_LSB;
+    return (int16_t)INA219_get_raw_power() * (int32_t)power_LSB;
 }
 
 int32_t INA219_get_current_uA()
 {
-    return (int32_t)INA219_get_raw_current() * current_LSB;
+    return (int16_t)INA219_get_raw_current() * (int32_t)current_LSB;
 }
 
 void INA219_switch_shunt(uint8_t shunt)

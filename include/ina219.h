@@ -148,10 +148,10 @@
 
 void INA219_init();
 
-uint16_t INA219_get_raw_shunt_voltage();
-uint16_t INA219_get_raw_bus_voltage();
-uint16_t INA219_get_raw_power();
-uint16_t INA219_get_raw_current();
+inline uint16_t INA219_get_raw_shunt_voltage();
+inline uint16_t INA219_get_raw_bus_voltage();
+inline uint16_t INA219_get_raw_power();
+inline uint16_t INA219_get_raw_current();
 
 int32_t INA219_get_shunt_voltage_uV();
 int32_t INA219_get_bus_voltage_mV();
