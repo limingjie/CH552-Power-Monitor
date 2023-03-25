@@ -12,6 +12,8 @@
 // - GitHub: https://github.com/limingjie/
 //
 
+#include "oled.h"
+
 #include "i2c.h"
 
 // OLED definitions
@@ -108,8 +110,8 @@ void OLED_clearline(uint8_t line)
     I2C_start(OLED_ADDR);      // start transmission to OLED
     I2C_write(OLED_DAT_MODE);  // set data mode
     for (i = 128; i; i--)
-        I2C_write(0x00);       // clear the line
-    I2C_stop();                // stop transmission
+        I2C_write(0x00);  // clear the line
+    I2C_stop();           // stop transmission
 }
 
 // OLED clear screen
@@ -137,9 +139,9 @@ void OLED_clear(void)
 void OLED_init(void)
 {
     uint8_t i;
-    I2C_init();                       // initialize I2C first
-    I2C_start(OLED_ADDR);             // start transmission to OLED
-    I2C_write(OLED_CMD_MODE);         // set command mode
+    I2C_init();                // initialize I2C first
+    I2C_start(OLED_ADDR);      // start transmission to OLED
+    I2C_write(OLED_CMD_MODE);  // set command mode
     for (i = 0; i < sizeof(OLED_INIT_CMD); i++)
         I2C_write(OLED_INIT_CMD[i]);  // send the command bytes
     I2C_stop();                       // stop transmission

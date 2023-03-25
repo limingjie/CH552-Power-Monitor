@@ -16,17 +16,17 @@
 // - GitHub: https://github.com/limingjie/
 //
 
-#include <ina219.h>
-#include <system.h>
+#include "ina219.h"
+
 #include <i2c.h>
 
 // Shunt resistor 0 = 0.1 Ω
 // Shunt resistor 1 =   1 Ω
 // Shunt resistor 2 =  10 Ω
-__data uint8_t        _current_LSB    = INA219_CURRENT_LSB_uA_0;
-__data uint16_t       _power_LSB      = INA219_POWER_LSB_uW_0;
-__code const uint8_t  _current_LSBs[] = {INA219_CURRENT_LSB_uA_0, INA219_CURRENT_LSB_uA_1, INA219_CURRENT_LSB_uA_2};
-__code const uint16_t _power_LSBs[]   = {INA219_POWER_LSB_uW_0, INA219_POWER_LSB_uW_1, INA219_POWER_LSB_uW_2};
+__data uint8_t        current_LSB    = INA219_CURRENT_LSB_uA_0;
+__data uint16_t       power_LSB      = INA219_POWER_LSB_uW_0;
+__code const uint8_t  current_LSBs[] = {INA219_CURRENT_LSB_uA_0, INA219_CURRENT_LSB_uA_1, INA219_CURRENT_LSB_uA_2};
+__code const uint16_t power_LSBs[]   = {INA219_POWER_LSB_uW_0, INA219_POWER_LSB_uW_1, INA219_POWER_LSB_uW_2};
 
 uint16_t INA219_read_word(uint8_t reg)
 {
@@ -87,16 +87,16 @@ int32_t INA219_get_bus_voltage_mV()
 
 int32_t INA219_get_power_uW()
 {
-    return (int32_t)INA219_get_raw_power() * _power_LSB;
+    return (int32_t)INA219_get_raw_power() * power_LSB;
 }
 
 int32_t INA219_get_current_uA()
 {
-    return (int32_t)INA219_get_raw_current() * _current_LSB;
+    return (int32_t)INA219_get_raw_current() * current_LSB;
 }
 
 void INA219_switch_shunt(uint8_t shunt)
 {
-    _power_LSB   = _power_LSBs[shunt];
-    _current_LSB = _current_LSBs[shunt];
+    power_LSB   = power_LSBs[shunt];
+    current_LSB = current_LSBs[shunt];
 }
