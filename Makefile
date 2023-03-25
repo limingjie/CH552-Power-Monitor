@@ -1,5 +1,7 @@
 TARGET     = power-meter
-C_FILES    = main.c include/time.c include/oled.c include/i2c.c include/ina219.c include/buzzer.c
+C_FILES    = include/time.c include/oled.c include/i2c.c
+C_FILES   += include/ina219.c include/buzzer.c include/encoder.c
+C_FILES   += meter.c main.c
 # ASM_FILES  = bitbang_asm.asm
 BUILD_DIR  = build
 
