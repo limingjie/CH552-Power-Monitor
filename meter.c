@@ -12,14 +12,14 @@ __data uint8_t shunt        = 0;  // Use the smallest shunt resistor by default
 __bit          undervoltage = 0;
 __data int8_t  recalibrate  = 0;
 
-__data int32_t shunt_voltage_uV      = 0;
-__data int32_t current_uA            = 0;
-__data int32_t bus_voltage_mV        = 0;
-__data int32_t power_uW              = 0;
-__data int32_t last_shunt_voltage_uV = -1;
-__data int32_t last_current_uA       = -1;
-__data int32_t last_bus_voltage_mV   = -1;
-__data int32_t last_power_uW         = -1;
+__xdata int32_t shunt_voltage_uV      = 0;
+__xdata int32_t current_uA            = 0;
+__xdata int32_t bus_voltage_mV        = 0;
+__xdata int32_t power_uW              = 0;
+__xdata int32_t last_shunt_voltage_uV = -1;
+__xdata int32_t last_current_uA       = -1;
+__xdata int32_t last_bus_voltage_mV   = -1;
+__xdata int32_t last_power_uW         = -1;
 
 __xdata char buf[25];
 
@@ -68,9 +68,9 @@ inline void meter_undervoltage_lockout()
     last_power_uW         = -1;
     last_current_uA       = -1;
 
-    OLED_printxy(8, 1, "       -");
-    OLED_printxy(8, 2, "       -");
-    OLED_printxy(8, 3, "       -");
+    OLED_printxy(8, 1, "         -");
+    OLED_printxy(8, 2, "         -");
+    OLED_printxy(8, 3, "         -");
 }
 
 inline __bit meter_check_calibration()
@@ -147,7 +147,7 @@ inline void meter_check_shunt()
 
 void print_thousands(uint8_t x, uint8_t y, __xdata int32_t value)
 {
-    sprintf(buf, "%6ld.%03ld", value / 1000, value % 1000);
+    sprintf(buf, "%6ld.%03ld", value / 1000, ((value < 0) ? -value : value) % 1000);
     OLED_printxy(x, y, buf);
 }
 
@@ -161,6 +161,12 @@ void meter_run()
     if (meter_check_calibration())
     {
         return;
+    }
+
+    if (shunt_voltage_uV != last_shunt_voltage_uV)
+    {
+        print_thousands(8, 4, shunt_voltage_uV);
+        last_shunt_voltage_uV = shunt_voltage_uV;
     }
 
     meter_check_undervoltage();
@@ -185,12 +191,6 @@ void meter_run()
         {
             print_thousands(8, 3, power_uW);
             last_power_uW = power_uW;
-        }
-
-        if (shunt_voltage_uV != last_shunt_voltage_uV)
-        {
-            print_thousands(8, 4, shunt_voltage_uV);
-            last_shunt_voltage_uV = shunt_voltage_uV;
         }
     }
 
