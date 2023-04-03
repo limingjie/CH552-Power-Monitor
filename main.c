@@ -1,5 +1,3 @@
-#include <stdio.h>  // sprintf
-
 #include <ch554.h>
 #include <system.h>  // mcu_config()
 #include <time.h>    // millis(), delay()
