@@ -6,8 +6,9 @@
 //
 // References
 // - https://github.com/wagiminator/CH552-USB-OLED
+// - https://github.com/datacute/Tiny4kOLED
 //
-// Mar 2023 by Li Mingjie
+// Apr 2023 by Li Mingjie
 // - Email:  limingjie@outlook.com
 // - GitHub: https://github.com/limingjie/
 //
@@ -17,201 +18,155 @@
 #include "i2c.h"
 
 // OLED definitions
-#define OLED_ADDR     0x78  // OLED write address (0x3C << 1)
-#define OLED_CMD_MODE 0x00  // set command mode
-#define OLED_DAT_MODE 0x40  // set data mode
+#define OLED_ADDR      0x78  // OLED write address (0x3C << 1)
+#define OLED_CMD_MODE  0x00  // set command mode
+#define OLED_DATA_MODE 0x40  // set data mode
 
 // OLED commands
-#define OLED_COLUMN_LOW  0x00  // set lower 4 bits of start column (0x00 - 0x0F)
-#define OLED_COLUMN_HIGH 0x10  // set higher 4 bits of start column (0x10 - 0x1F)
-#define OLED_MEMORYMODE  0x20  // set memory addressing mode (following byte)
-#define OLED_COLUMNS     0x21  // set start and end column (following 2 bytes)
-#define OLED_PAGES       0x22  // set start and end page (following 2 bytes)
-#define OLED_STARTLINE   0x40  // set display start line (0x40-0x7F = 0-63)
-#define OLED_CONTRAST    0x81  // set display contrast (following byte)
-#define OLED_CHARGEPUMP  0x8D  // (following byte - 0x14:enable, 0x10: disable)
-#define OLED_XFLIP_OFF   0xA0  // don't flip display horizontally
-#define OLED_XFLIP       0xA1  // flip display horizontally
-#define OLED_INVERT_OFF  0xA6  // set non-inverted display
-#define OLED_INVERT      0xA7  // set inverse display
-#define OLED_MULTIPLEX   0xA8  // set multiplex ratio (following byte)
-#define OLED_DISPLAY_OFF 0xAE  // set display off (sleep mode)
-#define OLED_DISPLAY_ON  0xAF  // set display on
-#define OLED_PAGE        0xB0  // set start page (following byte)
-#define OLED_YFLIP_OFF   0xC0  // don't flip display vertically
-#define OLED_YFLIP       0xC8  // flip display vertically
-#define OLED_OFFSET      0xD3  // set display offset (y-scroll: following byte)
-#define OLED_COMPINS     0xDA  // set COM pin config (following byte)
+#define OLED_COLUMN_LOW         0x00  // set lower 4 bits of start column (0x00 - 0x0F)
+#define OLED_COLUMN_HIGH        0x10  // set higher 4 bits of start column (0x10 - 0x1F)
+#define OLED_MEM_ADDR_MODE      0x20  // Set memory addressing mode (following byte)
+#define OLED_MEM_ADDR_MODE_PAGE 0x02  // Page addressing mode
+#define OLED_MEM_ADDR_MODE_H    0x00  // Horizontal addressing mode
+#define OLED_MEM_ADDR_MODE_V    0x01  // Vertical addressing mode
+#define OLED_COLUMN_ADDRESSES   0x21  // set start and end column (following 2 bytes)
+#define OLED_PAGE_ADDRESSES     0x22  // set start and end page (following 2 bytes)
+#define OLED_STARTLINE          0x40  // set display start line (0x40-0x7F = 0-63)
+#define OLED_CONTRAST           0x81  // Set display contrast (following a byte, 0-255) - (Reset 0x7F)
+#define OLED_CHARGE_PUMP        0x8D  // (following byte - 0x14:enable, 0x10: disable)
+#define OLED_H_FLIP_OFF         0xA0  // don't flip display horizontally
+#define OLED_H_FLIP_ON          0xA1  // flip display horizontally
+#define OLEF_RESUME_DISPLAY     0xA4  // Resume to RAM content display
+#define OLEF_ENTIRE_DISPLAY_ON  0xA5  // Entire display ON
+#define OLEF_NORMAL_DISPLAY     0xA6  // Normal display - (Reset)
+#define OLED_INVERT_DISPLAY     0xA7  // Inverse display
+#define OLED_MULTIPLEX          0xA8  // set multiplex ratio (following byte)
+#define OLED_DISPLAY_OFF        0xAE  // Display OFF (sleep mode) - (Reset)
+#define OLED_DISPLAY_ON         0xAF  // Display ON in normal mode
+#define OLED_PAGE               0xB0  // set start page (following byte)
+#define OLED_V_FLIP_OFF         0xC0  // don't flip display vertically
+#define OLED_V_FLIP_ON          0xC8  // flip display vertically
+#define OLED_OFFSET             0xD3  // set display offset (y-scroll: following byte)
+#define OLED_COM_PINS           0xDA  // set COM pin config (following byte)
 
-// Standard ASCII 5x8 font (adapted from Neven Boyanov and Stephen Denne)
-__code uint8_t OLED_FONT[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2F, 0x00, 0x00, 0x00, 0x07, 0x00, 0x07, 0x00, 0x14, 0x7F, 0x14, 0x7F,
-    0x14, 0x24, 0x2A, 0x7F, 0x2A, 0x12, 0x23, 0x13, 0x08, 0x64, 0x62, 0x36, 0x49, 0x55, 0x22, 0x50, 0x00, 0x05, 0x03,
-    0x00, 0x00, 0x00, 0x1C, 0x22, 0x41, 0x00, 0x00, 0x41, 0x22, 0x1C, 0x00, 0x14, 0x08, 0x3E, 0x08, 0x14, 0x08, 0x08,
-    0x3E, 0x08, 0x08, 0x00, 0x00, 0xA0, 0x60, 0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x00, 0x60, 0x60, 0x00, 0x00, 0x20,
-    0x10, 0x08, 0x04, 0x02, 0x3E, 0x51, 0x49, 0x45, 0x3E, 0x00, 0x42, 0x7F, 0x40, 0x00, 0x42, 0x61, 0x51, 0x49, 0x46,
-    0x21, 0x41, 0x45, 0x4B, 0x31, 0x18, 0x14, 0x12, 0x7F, 0x10, 0x27, 0x45, 0x45, 0x45, 0x39, 0x3C, 0x4A, 0x49, 0x49,
-    0x30, 0x01, 0x71, 0x09, 0x05, 0x03, 0x36, 0x49, 0x49, 0x49, 0x36, 0x06, 0x49, 0x49, 0x29, 0x1E, 0x00, 0x36, 0x36,
-    0x00, 0x00, 0x00, 0x56, 0x36, 0x00, 0x00, 0x08, 0x14, 0x22, 0x41, 0x00, 0x14, 0x14, 0x14, 0x14, 0x14, 0x00, 0x41,
-    0x22, 0x14, 0x08, 0x02, 0x01, 0x51, 0x09, 0x06, 0x32, 0x49, 0x59, 0x51, 0x3E, 0x7C, 0x12, 0x11, 0x12, 0x7C, 0x7F,
-    0x49, 0x49, 0x49, 0x36, 0x3E, 0x41, 0x41, 0x41, 0x22, 0x7F, 0x41, 0x41, 0x22, 0x1C, 0x7F, 0x49, 0x49, 0x49, 0x41,
-    0x7F, 0x09, 0x09, 0x09, 0x01, 0x3E, 0x41, 0x49, 0x49, 0x7A, 0x7F, 0x08, 0x08, 0x08, 0x7F, 0x00, 0x41, 0x7F, 0x41,
-    0x00, 0x20, 0x40, 0x41, 0x3F, 0x01, 0x7F, 0x08, 0x14, 0x22, 0x41, 0x7F, 0x40, 0x40, 0x40, 0x40, 0x7F, 0x02, 0x0C,
-    0x02, 0x7F, 0x7F, 0x04, 0x08, 0x10, 0x7F, 0x3E, 0x41, 0x41, 0x41, 0x3E, 0x7F, 0x09, 0x09, 0x09, 0x06, 0x3E, 0x41,
-    0x51, 0x21, 0x5E, 0x7F, 0x09, 0x19, 0x29, 0x46, 0x46, 0x49, 0x49, 0x49, 0x31, 0x01, 0x01, 0x7F, 0x01, 0x01, 0x3F,
-    0x40, 0x40, 0x40, 0x3F, 0x1F, 0x20, 0x40, 0x20, 0x1F, 0x3F, 0x40, 0x38, 0x40, 0x3F, 0x63, 0x14, 0x08, 0x14, 0x63,
-    0x07, 0x08, 0x70, 0x08, 0x07, 0x61, 0x51, 0x49, 0x45, 0x43, 0x00, 0x7F, 0x41, 0x41, 0x00, 0x02, 0x04, 0x08, 0x10,
-    0x20, 0x00, 0x41, 0x41, 0x7F, 0x00, 0x04, 0x02, 0x01, 0x02, 0x04, 0x40, 0x40, 0x40, 0x40, 0x40, 0x00, 0x01, 0x02,
-    0x04, 0x00, 0x20, 0x54, 0x54, 0x54, 0x78, 0x7F, 0x48, 0x44, 0x44, 0x38, 0x38, 0x44, 0x44, 0x44, 0x20, 0x38, 0x44,
-    0x44, 0x48, 0x7F, 0x38, 0x54, 0x54, 0x54, 0x18, 0x08, 0x7E, 0x09, 0x01, 0x02, 0x18, 0xA4, 0xA4, 0xA4, 0x7C, 0x7F,
-    0x08, 0x04, 0x04, 0x78, 0x00, 0x44, 0x7D, 0x40, 0x00, 0x40, 0x80, 0x84, 0x7D, 0x00, 0x7F, 0x10, 0x28, 0x44, 0x00,
-    0x00, 0x41, 0x7F, 0x40, 0x00, 0x7C, 0x04, 0x18, 0x04, 0x78, 0x7C, 0x08, 0x04, 0x04, 0x78, 0x38, 0x44, 0x44, 0x44,
-    0x38, 0xFC, 0x24, 0x24, 0x24, 0x18, 0x18, 0x24, 0x24, 0x18, 0xFC, 0x7C, 0x08, 0x04, 0x04, 0x08, 0x48, 0x54, 0x54,
-    0x54, 0x20, 0x04, 0x3F, 0x44, 0x40, 0x20, 0x3C, 0x40, 0x40, 0x20, 0x7C, 0x1C, 0x20, 0x40, 0x20, 0x1C, 0x3C, 0x40,
-    0x30, 0x40, 0x3C, 0x44, 0x28, 0x10, 0x28, 0x44, 0x1C, 0xA0, 0xA0, 0xA0, 0x7C, 0x44, 0x64, 0x54, 0x4C, 0x44, 0x08,
-    0x36, 0x41, 0x41, 0x00, 0x00, 0x00, 0x7F, 0x00, 0x00, 0x00, 0x41, 0x41, 0x36, 0x08, 0x08, 0x04, 0x08, 0x10, 0x08,
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-
-// OLED initialisation sequence
+// OLED initialization sequence
 __code uint8_t OLED_INIT_CMD[] = {
-    OLED_MULTIPLEX,  0x3F,            // set multiplex ratio
-    OLED_CHARGEPUMP, 0x14,            // set DC-DC enable
-    OLED_MEMORYMODE, 0x02,            // set page addressing mode
-    OLED_COMPINS,    0x12,            // set com pins
-    OLED_XFLIP_OFF,  OLED_YFLIP_OFF,  // flip screen
-    OLED_DISPLAY_ON                   // display on
+    OLED_MULTIPLEX,     0x3F,                  // set multiplex ratio
+    OLED_CHARGE_PUMP,   0x14,                  // set DC-DC enable
+    OLED_MEM_ADDR_MODE, OLED_MEM_ADDR_MODE_V,  // set page addressing mode
+    OLED_COM_PINS,      0x12,                  // set com pins
+    OLED_CONTRAST,      0x3F,                  // set contrast 63 / 255
+    OLED_DISPLAY_ON                            // display on
 };
 
-// OLED global variables
-__xdata uint8_t line, column;
-
-// Set x,y position base on 6x8 font
-void OLED_setxy(uint8_t x, uint8_t y)
-{
-    column = x;
-    line   = y;
-    // Calculate screen column base on font size, x *= 6;
-    x += x << 1;  // x *= 3
-    x <<= 1;      // x *= 2
-    // x *= 6;
-    I2C_start(OLED_ADDR);                 // start transmission to OLED
-    I2C_write(OLED_CMD_MODE);             // set command mode
-    I2C_write(OLED_PAGE + y);             // set line
-    I2C_write(x & 0x0F);                  // set lower column start address [0x00, 0x0F], x & 0x0F
-    I2C_write(0x10 + ((x >> 4) & 0x0F));  // set upper column start address [0x10, 0x1F], (x >> 4) & 0x0F
-    I2C_stop();                           // stop transmission
-}
-
-// OLED clear line
-void OLED_clearline(uint8_t line)
-{
-    uint8_t i;
-    OLED_setxy(0, line);       // set cursor to line start
-    I2C_start(OLED_ADDR);      // start transmission to OLED
-    I2C_write(OLED_DAT_MODE);  // set data mode
-    for (i = 128; i; i--)
-        I2C_write(0x00);  // clear the line
-    I2C_stop();           // stop transmission
-}
-
-// OLED clear screen
-void OLED_clear(void)
-{
-    uint8_t i;
-    for (i = 0; i < 8; i++)
-        OLED_clearline(i);
-    OLED_setxy(0, 0);
-}
-
-// OLED clear the top line, then scroll the display up by one line
-// void OLED_scrollDisplay(void)
-// {
-//     OLED_clearline(scroll);        // clear line
-//     scroll = (scroll + 1) & 0x07;  // set next line
-//     I2C_start(OLED_ADDR);          // start transmission to OLED
-//     I2C_write(OLED_CMD_MODE);      // set command mode
-//     I2C_write(OLED_OFFSET);        // set display offset:
-//     I2C_write(scroll << 3);        // scroll up
-//     I2C_stop();                    // stop transmission
-// }
+__data uint8_t _page   = 0;  // OLED memory pages, from 0 to 7.
+__data uint8_t _column = 0;  // OLED memory columns, from 0 to 127.
+OLED_font*     _font;        // Default font
 
 // OLED init function
 void OLED_init(void)
 {
-    uint8_t i;
     I2C_init();                // initialize I2C first
     I2C_start(OLED_ADDR);      // start transmission to OLED
     I2C_write(OLED_CMD_MODE);  // set command mode
-    for (i = 0; i < sizeof(OLED_INIT_CMD); i++)
-        I2C_write(OLED_INIT_CMD[i]);  // send the command bytes
-    I2C_stop();                       // stop transmission
-    OLED_clear();                     // clear screen
-}
-
-// OLED plot a single character
-void OLED_plotChar(char c)
-{
-    uint8_t  i;
-    uint16_t ptr = c - 32;     // character pointer
-    ptr += ptr << 2;           // -> ptr = (ch - 32) * 5;
-    I2C_start(OLED_ADDR);      // start transmission to OLED
-    I2C_write(OLED_DAT_MODE);  // set data mode
-    for (i = 5; i; i--)
-        I2C_write(OLED_FONT[ptr++]);
-    I2C_write(0x00);  // write space between characters
-    I2C_stop();       // stop transmission
-}
-
-// OLED write a character or handle control characters
-void OLED_write(char c)
-{
-    c = c & 0x7F;  // ignore top bit
-    // normal character
-    if (c >= 32)
+    uint8_t size = sizeof(OLED_INIT_CMD);
+    for (uint8_t i = 0; i < size; i++)
     {
-        OLED_plotChar(c);
-        if (++column > 20)
+        I2C_write(OLED_INIT_CMD[i]);  // send the command bytes
+    }
+    I2C_stop();  // stop transmission
+}
+
+// Set memory address range
+void OLED_setMemoryAddress(uint8_t start_page, uint8_t end_page, uint8_t start_column, uint8_t end_column)
+{
+    _page   = start_page;
+    _column = start_column;
+    I2C_start(OLED_ADDR);              // start transmission to OLED
+    I2C_write(OLED_CMD_MODE);          // set command mode
+    I2C_write(OLED_PAGE_ADDRESSES);    // set page addresses
+    I2C_write(start_page);             // set start page
+    I2C_write(end_page);               // set end page
+    I2C_write(OLED_COLUMN_ADDRESSES);  // set page addresses
+    I2C_write(start_column);           // set start page
+    I2C_write(end_column);             // set end page
+    I2C_stop();                        // stop transmission
+}
+
+// Clear screen
+void OLED_clear(void)
+{
+    OLED_setMemoryAddress(0, 7, 0, 127);
+
+    I2C_start(OLED_ADDR);       // start transmission to OLED
+    I2C_write(OLED_DATA_MODE);  // set data mode
+    for (uint8_t page = 8; page; page--)
+    {
+        for (uint8_t column = 128; column; column--)
         {
-            column = 0;
-            line++;
-            line %= 8;
-            OLED_setxy(0, line);
+            I2C_write(0x00);
         }
     }
-    // new line
-    else if (c == '\n')
+    I2C_stop();  // stop transmission
+
+    _page   = 0;
+    _column = 0;
+}
+
+void OLED_setFont(OLED_font* font)
+{
+    _font = font;
+}
+
+void OLED_setCursor(uint8_t page, uint8_t column)
+{
+    _page   = page;
+    _column = column;
+}
+
+// Helper
+void OLED_plotChar(char c)
+{
+    uint8_t i, j;
+
+    __code uint8_t* data = &_font->data[(c - _font->first) * _font->width * _font->height];
+
+    for (i = _font->width; i; i--)
     {
-        column = 0;
-        line++;
-        line %= 8;
-        OLED_setxy(0, line);
+        for (j = _font->height; j; j--)
+        {
+            I2C_write(*data++);
+        }
+        _column++;
     }
-    // carriage return
-    else if (c == '\r')
+    for (i = _font->spacing; i; i--)
     {
-        column = 0;
-        OLED_setxy(0, line);
+        for (j = _font->height; j; j--)
+        {
+            I2C_write(0x00);
+        }
+        _column++;
     }
 }
 
-// OLED print string
-void OLED_print(char* str)
+// Print a single character
+void OLED_write(char c)
 {
+    OLED_setMemoryAddress(_page, _page + _font->height - 1, _column, 127);
+    I2C_start(OLED_ADDR);       // start transmission to OLED
+    I2C_write(OLED_DATA_MODE);  // set data mode
+    OLED_plotChar(c);
+    I2C_stop();  // stop transmission
+}
+
+void OLED_print(const char* str)
+{
+    OLED_setMemoryAddress(_page, _page + _font->height - 1, _column, 127);
+    I2C_start(OLED_ADDR);       // start transmission to OLED
+    I2C_write(OLED_DATA_MODE);  // set data mode
     while (*str)
-        OLED_write(*str++);
-}
-
-// OLED print string with newline
-void OLED_println(char* str)
-{
-    OLED_print(str);
-    OLED_write('\n');
-}
-
-void OLED_printxy(uint8_t x, uint8_t y, char* str)
-{
-    OLED_setxy(x, y);
-    line   = y;
-    column = x;
-    OLED_print(str);
+    {
+        OLED_plotChar(*str++);
+    }
+    I2C_stop();  // stop transmission
 }

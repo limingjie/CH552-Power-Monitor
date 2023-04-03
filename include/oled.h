@@ -6,8 +6,9 @@
 //
 // References
 // - https://github.com/wagiminator/CH552-USB-OLED
+// - https://github.com/datacute/Tiny4kOLED
 //
-// Mar 2023 by Li Mingjie
+// Apr 2023 by Li Mingjie
 // - Email:  limingjie@outlook.com
 // - GitHub: https://github.com/limingjie/
 //
@@ -15,11 +16,11 @@
 #pragma once
 #include <stdint.h>
 
-void OLED_init(void);          // OLED init function
-void OLED_clear(void);         // OLED clear screen
-void OLED_write(char c);       // OLED write a character or handle control characters
-void OLED_print(char* str);    // OLED print string
-void OLED_println(char* str);  // OLED print string with newline
-void OLED_setline(uint8_t line);
-void OLED_clearline(uint8_t line);
-void OLED_printxy(uint8_t x, uint8_t y, char* str);
+#include "font.h"
+
+void OLED_init(void);
+void OLED_clear(void);
+void OLED_setFont(OLED_font* font);
+void OLED_setCursor(uint8_t page, uint8_t column);
+void OLED_write(char c);
+void OLED_print(const char* str);

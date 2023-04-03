@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include <time.h>
 
+#include <font_5x8.h>
+#include <font_8x16.h>
+
 __data uint8_t shunt        = 0;  // Use the smallest shunt resistor by default
 __bit          undervoltage = 0;
 __data int8_t  recalibrate  = 0;
@@ -20,6 +23,8 @@ __xdata int32_t last_shunt_voltage_uV = -1;
 __xdata int32_t last_current_uA       = -1;
 __xdata int32_t last_bus_voltage_mV   = -1;
 __xdata int32_t last_power_uW         = -1;
+__xdata int32_t max_current_uA        = 0;
+__xdata int32_t min_current_uA        = 0x7FFFFFFF;
 
 __xdata char buf[25];
 
@@ -29,21 +34,33 @@ void meter_init()
     PIN_output(SHUNT0_EN);
     PIN_output(SHUNT1_EN);
     PIN_output(SHUNT2_EN);
-    PIN_high(SHUNT0_EN);
+    PIN_low(SHUNT0_EN);
     PIN_low(SHUNT1_EN);
     PIN_low(SHUNT2_EN);
 
     INA219_init();
+    PIN_high(SHUNT0_EN);
+    INA219_switch_shunt(0);
 }
 
 inline void meter_display()
 {
-    OLED_clear();
-    OLED_printxy(0, 0, "-----Power Meter-----");
-    OLED_printxy(0, 1, "Voltage            V");
-    OLED_printxy(0, 2, "Current            mA");
-    OLED_printxy(0, 3, "Power              mW");
-    OLED_printxy(0, 4, "Shunt              mV");
+    OLED_setFont(&OLED_FONT_8x16);
+    OLED_setCursor(0, 120);
+    OLED_print("V");
+    OLED_setCursor(2, 112);
+    OLED_print("mA");
+    OLED_setCursor(4, 112);
+    OLED_print("mW");
+    OLED_setFont(&OLED_FONT_5x8);
+    OLED_setCursor(6, 0);
+    OLED_print("MAX");
+    OLED_setCursor(6, 116);
+    OLED_print("mA");
+    OLED_setCursor(7, 0);
+    OLED_print("MIN");
+    OLED_setCursor(7, 116);
+    OLED_print("mA");
 }
 
 void meter_switch_to_shunt(uint8_t to_shunt)
@@ -68,9 +85,18 @@ inline void meter_undervoltage_lockout()
     last_power_uW         = -1;
     last_current_uA       = -1;
 
-    OLED_printxy(8, 1, "         -");
-    OLED_printxy(8, 2, "         -");
-    OLED_printxy(8, 3, "         -");
+    OLED_setFont(&OLED_FONT_8x16);
+    OLED_setCursor(0, 32);
+    OLED_print("        -");
+    OLED_setCursor(2, 32);
+    OLED_print("        -");
+    OLED_setCursor(4, 32);
+    OLED_print("        -");
+    OLED_setFont(&OLED_FONT_5x8);
+    OLED_setCursor(6, 50);
+    OLED_print("        -");
+    OLED_setCursor(7, 50);
+    OLED_print("        -");
 }
 
 inline __bit meter_check_calibration()
@@ -145,10 +171,17 @@ inline void meter_check_shunt()
     }
 }
 
-void print_thousands(uint8_t x, uint8_t y, __xdata int32_t value)
+void print_thousands(uint8_t page, uint8_t column, __xdata int32_t value)
 {
-    sprintf(buf, "%6ld.%03ld", value / 1000, ((value < 0) ? -value : value) % 1000);
-    OLED_printxy(x, y, buf);
+    // __bit neg = 0;
+    // if (value < 0)
+    // {
+    //     neg   = 1;
+    //     value = -value;
+    // }
+    sprintf(buf, "%6ld.%02ld", value / 1000, value % 100);
+    OLED_setCursor(page, column);
+    OLED_print(buf);
 }
 
 void meter_run()
@@ -163,11 +196,11 @@ void meter_run()
         return;
     }
 
-    if (shunt_voltage_uV != last_shunt_voltage_uV)
-    {
-        print_thousands(8, 4, shunt_voltage_uV);
-        last_shunt_voltage_uV = shunt_voltage_uV;
-    }
+    // if (shunt_voltage_uV != last_shunt_voltage_uV)
+    // {
+    //     print_thousands(7, 4, shunt_voltage_uV);
+    //     last_shunt_voltage_uV = shunt_voltage_uV;
+    // }
 
     meter_check_undervoltage();
 
@@ -175,25 +208,38 @@ void meter_run()
     {
         meter_check_shunt();
 
+        if (current_uA > max_current_uA)
+        {
+            max_current_uA = current_uA;
+        }
+
+        if (current_uA < min_current_uA)
+        {
+            min_current_uA = current_uA;
+        }
+
+        OLED_setFont(&OLED_FONT_8x16);
+
         if (bus_voltage_mV != last_bus_voltage_mV)
         {
-            print_thousands(8, 1, bus_voltage_mV);
+            print_thousands(0, 32, bus_voltage_mV);
             last_bus_voltage_mV = bus_voltage_mV;
         }
 
         if (current_uA != last_current_uA)
         {
-            print_thousands(8, 2, current_uA);
+            print_thousands(2, 32, current_uA);
             last_current_uA = current_uA;
         }
 
         if (power_uW != last_power_uW)
         {
-            print_thousands(8, 3, power_uW);
+            print_thousands(4, 32, power_uW);
             last_power_uW = power_uW;
         }
-    }
 
-    sprintf(buf, "Recal=%d Shunt=%d", recalibrate, shunt);
-    OLED_printxy(0, 6, buf);
+        OLED_setFont(&OLED_FONT_5x8);
+        print_thousands(6, 50, max_current_uA);
+        print_thousands(7, 50, min_current_uA);
+    }
 }

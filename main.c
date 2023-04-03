@@ -20,15 +20,16 @@ void startup()
     delay(5);
 
     meter_init();
+    OLED_init();
+    OLED_clear();
     timer_init();
     encoder_init();
     buzzer_init();
-    OLED_init();
 }
 
 void main()
 {
-    __xdata char buf[25];
+    // __xdata char buf[25];
 
     startup();
     buzzer_play(start_sound);
@@ -36,12 +37,12 @@ void main()
 
     while (1)
     {
-        if (encoder_process())
-        {
-            // TODO: functions
-            sprintf(buf, "enc = %3u", encoder_get_delta());
-            OLED_printxy(0, 7, buf);
-        }
+        // if (encoder_process())
+        // {
+        //     // TODO: functions
+        //     sprintf(buf, "enc = %3u", encoder_get_delta());
+        //     OLED_printxy(0, 7, buf);
+        // }
 
         if (millis() - last_system_time >= 50)
         {
