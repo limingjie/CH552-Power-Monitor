@@ -21,6 +21,8 @@ __data int32_t power_uW         = 0;
 __data int32_t max_current_uA   = 0;
 __data int32_t min_current_uA   = 0x7FFFFFFF;
 
+__code char str_lockout[] = "         -";
+
 void meter_init()
 {
     // Enable shunt 0 by default
@@ -40,20 +42,20 @@ inline void meter_display()
 {
     OLED_setFont(&OLED_FONT_8x16);
     OLED_setCursor(0, 120);
-    OLED_print("V");
-    OLED_setCursor(2, 112);
-    OLED_print("mA");
-    OLED_setCursor(4, 112);
-    OLED_print("mW");
+    OLED_write('V');
+    OLED_setCursor(2, 120);
+    OLED_write('A');
+    OLED_setCursor(4, 120);
+    OLED_write('W');
     OLED_setFont(&OLED_FONT_5x8);
     OLED_setCursor(6, 0);
     OLED_print("MAX");
-    OLED_setCursor(6, 116);
-    OLED_print("mA");
+    OLED_setCursor(6, 118);
+    OLED_write('A');
     OLED_setCursor(7, 0);
     OLED_print("MIN");
-    OLED_setCursor(7, 116);
-    OLED_print("mA");
+    OLED_setCursor(7, 118);
+    OLED_write('A');
 }
 
 void meter_switch_to_shunt(uint8_t to_shunt)
@@ -74,17 +76,17 @@ inline void meter_undervoltage_lockout()
     }
 
     OLED_setFont(&OLED_FONT_8x16);
-    OLED_setCursor(0, 28);
-    OLED_print("         -");
-    OLED_setCursor(2, 28);
-    OLED_print("         -");
-    OLED_setCursor(4, 28);
-    OLED_print("         -");
+    OLED_setCursor(0, 27);
+    OLED_print(str_lockout);
+    OLED_setCursor(2, 27);
+    OLED_print(str_lockout);
+    OLED_setCursor(4, 27);
+    OLED_print(str_lockout);
     OLED_setFont(&OLED_FONT_5x8);
-    OLED_setCursor(6, 44);
-    OLED_print("         -");
-    OLED_setCursor(7, 44);
-    OLED_print("         -");
+    OLED_setCursor(6, 47);
+    OLED_print(str_lockout);
+    OLED_setCursor(7, 47);
+    OLED_print(str_lockout);
 }
 
 inline __bit meter_check_calibration()
@@ -102,7 +104,7 @@ inline __bit meter_check_calibration()
     return 0;
 }
 
-inline void meter_check_undervoltage()
+void meter_check_undervoltage()
 {
     if (undervoltage)
     {
@@ -169,69 +171,93 @@ __bit meter_check_shunt()
     return 0;
 }
 
-void print_reading(uint8_t page, uint8_t font_width, int32_t value)
+// Print the reading and unit
+// - Print the reading in proper unit, either V/A/W or mV/mA/mW.
+//   - [0, 1000000)   ->  xxx.yy  mV/mA/mW
+//   - [1000000, Max] -> xxxx.yyy V/A/W
+// - Handling at most 10 digits including floating point and minus sign.
+//   - xxxxxx.yyy
+//   - -xxxxx.yyy
+// - Right aligned and fill the remain digits with space ' '.
+void print_reading(uint8_t page, uint8_t reading_column, uint8_t unit_column, int32_t reading)
 {
-    __bit neg = 0;
-    if (value < 0)
+    static char str[11];
+    uint8_t     decimal_precision;
+    uint8_t     digits = 10;
+    __bit       neg    = 0;
+
+    // Handle negative number
+    if (reading < 0)
     {
-        neg   = 1;
-        value = -value;
+        neg     = 1;
+        reading = -reading;
     }
 
-    // Remove the last digit
-    value /= 10;
-
-    // Print dot
-    OLED_setCursor(page, 87);
-    OLED_write('.');
-
-    // Print fractional part
-    uint8_t pos = 92 + font_width;
-    uint8_t i;
-    for (i = 2; i; i--)
+    // Calculate and print the unit of the reading
+    if (reading < 1000)  // uV/uA/uW
     {
-        OLED_setCursor(page, pos);
-        OLED_write('0' + value % 10);
-        value /= 10;
-        pos -= font_width;
+        OLED_setCursor(page, unit_column);
+        OLED_write('u');
+        decimal_precision = 0;
+    }
+    else if (reading < 1000000)  // mV/mA/mW
+    {
+        OLED_setCursor(page, unit_column);
+        OLED_write('m');
+        decimal_precision = 3;
+    }
+    else  // V/A/W
+    {
+        OLED_setCursor(page, unit_column);
+        OLED_write(' ');
+        decimal_precision = 3;
+        reading /= 1000;
     }
 
-    // Print integer part
-    pos = 86 - font_width;
-    i   = 7;
-    while (value > 0)
+    str[digits] = '\0';  // End of the string.
+
+    // Calculate the fractional part
+    if (decimal_precision)
     {
-        OLED_setCursor(page, pos);
-        OLED_write('0' + value % 10);
-        value /= 10;
-        pos -= font_width;
-        i--;
+        while (decimal_precision)
+        {
+            str[--digits] = reading % 10 + '0';
+            reading /= 10;
+            --decimal_precision;
+        }
+
+        // Place the decimal point
+        str[--digits] = '.';
     }
 
-    if (i == 7)
+    // Calculate the integer part
+    if (reading == 0)
     {
-        OLED_setCursor(page, pos);
-        OLED_write('0');
-        pos -= font_width;
-        i--;
+        str[--digits] = '0';
+    }
+    else
+    {
+        while (reading)
+        {
+            str[--digits] = reading % 10 + '0';
+            reading /= 10;
+        }
     }
 
-    // Print minus sign
+    // Place the minus sign
     if (neg)
     {
-        OLED_setCursor(page, pos);
-        OLED_write('-');
-        pos -= font_width;
-        i--;
+        str[--digits] = '-';
     }
 
-    // Overwrite remaining digits
-    for (; i; i--)
+    // Fill in spaces
+    while (digits)
     {
-        OLED_setCursor(page, pos);
-        OLED_write(' ');
-        pos -= font_width;
+        str[--digits] = ' ';
     }
+
+    OLED_setCursor(page, reading_column);
+    OLED_print(str);
 }
 
 void meter_run()
@@ -246,11 +272,8 @@ void meter_run()
         return;
     }
 
-    // if (shunt_voltage_uV != last_shunt_voltage_uV)
-    // {
-    //     print_reading(7, 4, shunt_voltage_uV);
-    //     last_shunt_voltage_uV = shunt_voltage_uV;
-    // }
+    // print_reading(7, 4, shunt_voltage_uV);
+    // last_shunt_voltage_uV = shunt_voltage_uV;
 
     meter_check_undervoltage();
 
@@ -272,11 +295,11 @@ void meter_run()
         }
 
         OLED_setFont(&OLED_FONT_8x16);
-        print_reading(0, 8, bus_voltage_mV);
-        print_reading(2, 8, current_uA);
-        print_reading(4, 8, power_uW);
+        print_reading(0, 27, 112, bus_voltage_mV * 1000);
+        print_reading(2, 27, 112, current_uA);
+        print_reading(4, 27, 112, power_uW);
         OLED_setFont(&OLED_FONT_5x8);
-        print_reading(6, 6, max_current_uA);
-        print_reading(7, 6, min_current_uA);
+        print_reading(6, 47, 112, max_current_uA);
+        print_reading(7, 47, 112, min_current_uA);
     }
 }
