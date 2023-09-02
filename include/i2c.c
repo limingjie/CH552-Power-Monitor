@@ -47,8 +47,8 @@
 //   #error PIN_SCL is undefined
 // #endif
 // I2C pins
-#define PIN_SDA P16  // I2C SDA
-#define PIN_SCL P17  // I2C SCL
+#define PIN_SDA P17  // I2C SDA
+#define PIN_SCL P16  // I2C SCL
 
 // I2C macros
 #define I2C_SDA_HIGH()  PIN_high(PIN_SDA) // release SDA -> pulled HIGH by resistor

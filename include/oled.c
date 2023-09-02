@@ -56,12 +56,14 @@ __code uint8_t OLED_INIT_CMD[] = {
     OLED_MEM_ADDR_MODE, OLED_MEM_ADDR_MODE_V,  // set page addressing mode
     OLED_COM_PINS,      0x12,                  // set com pins
     OLED_CONTRAST,      0x3F,                  // set contrast 63 / 255
+    OLED_H_FLIP_ON,     OLED_V_FLIP_ON,
     OLED_DISPLAY_ON                            // display on
 };
 
 __data uint8_t _page   = 0;  // OLED memory pages, from 0 to 7.
 __data uint8_t _column = 0;  // OLED memory columns, from 0 to 127.
 OLED_font*     _font;        // Default font
+__bit          _color = 1;
 
 // OLED init function
 void OLED_init(void)
@@ -74,7 +76,7 @@ void OLED_init(void)
     {
         I2C_write(OLED_INIT_CMD[i]);  // send the command bytes
     }
-    I2C_stop();  // stop transmission
+    I2C_stop();                       // stop transmission
 }
 
 // Set memory address range
@@ -118,24 +120,30 @@ void OLED_setFont(OLED_font* font)
     _font = font;
 }
 
+void OLED_setColor(__bit color)
+{
+    _color = color;
+}
+
 void OLED_setCursor(uint8_t page, uint8_t column)
 {
     _page   = page;
     _column = column;
 }
 
-// Helper
+// Plot a character
 void OLED_plotChar(char c)
 {
-    uint8_t i, j;
+    uint8_t i, j, byte;
 
-    __code uint8_t* data = &_font->data[(c - _font->first) * _font->width * _font->height];
+    const uint8_t* data = &_font->data[(uint16_t)(c - _font->first) * _font->width * _font->height];
 
     for (i = _font->width; i; i--)
     {
         for (j = _font->height; j; j--)
         {
-            I2C_write(*data++);
+            byte = *data++;
+            I2C_write(_color ? byte : ~byte);
         }
         _column++;
     }
@@ -143,7 +151,7 @@ void OLED_plotChar(char c)
     {
         for (j = _font->height; j; j--)
         {
-            I2C_write(0x00);
+            I2C_write(_color ? 0x00 : 0xff);
         }
         _column++;
     }
@@ -156,7 +164,7 @@ void OLED_write(char c)
     I2C_start(OLED_ADDR);       // start transmission to OLED
     I2C_write(OLED_DATA_MODE);  // set data mode
     OLED_plotChar(c);
-    I2C_stop();  // stop transmission
+    I2C_stop();                 // stop transmission
 }
 
 void OLED_print(const char* str)

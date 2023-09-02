@@ -18,9 +18,13 @@
 
 #include "font.h"
 
+#define OLED_COLOR_INVERT 0
+#define OLED_COLOR_NORMAL 1
+
 void OLED_init(void);
 void OLED_clear(void);
 void OLED_setFont(OLED_font* font);
+void OLED_setColor(__bit color);
 void OLED_setCursor(uint8_t page, uint8_t column);
 void OLED_write(char c);
 void OLED_print(const char* str);

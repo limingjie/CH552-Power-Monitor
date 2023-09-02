@@ -17,9 +17,9 @@ void startup()
     mcu_config();
     delay(5);
 
-    meter_init();
     OLED_init();
     OLED_clear();
+    meter_init();
     timer_init();
     encoder_init();
     buzzer_init();

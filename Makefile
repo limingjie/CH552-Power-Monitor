@@ -18,7 +18,7 @@ PACK_HEX   = packihx
 WCHISP    ?= python3 -m ch55xtool -f
 
 # Flags
-CFLAGS    := --std-c11 --Werror --opt-code-size -V -mmcs51 --model-small
+CFLAGS    := --std-c2x --Werror --opt-code-size -V -mmcs51 --model-small
 CFLAGS    += --xram-size $(XRAM_SIZE) --xram-loc $(XRAM_LOC) --code-size $(CODE_SIZE)
 CFLAGS    += -Iinclude
 CFLAGS    += -DFREQ_SYS=$(FREQ_SYS)

@@ -23,6 +23,20 @@ __data int32_t min_current_uA   = 0x7FFFFFFF;
 
 __code char str_lockout[] = "         -";
 
+void meter_switch_to_shunt(uint8_t to_shunt)
+{
+    INA219_switch_shunt(to_shunt);
+    shunt = to_shunt;
+
+    OLED_setFont(&OLED_FONT_8x16);
+    OLED_setColor(0);
+    OLED_setCursor(0, 0);
+    OLED_write('0' + shunt);
+    OLED_setColor(1);
+
+    delay(100);  // Wait for INA219 to get new data
+}
+
 void meter_init()
 {
     // Enable shunt 0 by default
@@ -35,7 +49,7 @@ void meter_init()
 
     INA219_init();
     PIN_high(SHUNT0_EN);
-    INA219_switch_shunt(0);
+    meter_switch_to_shunt(0);
 }
 
 inline void meter_display()
@@ -56,13 +70,6 @@ inline void meter_display()
     OLED_print("MIN");
     OLED_setCursor(7, 118);
     OLED_write('A');
-}
-
-void meter_switch_to_shunt(uint8_t to_shunt)
-{
-    INA219_switch_shunt(to_shunt);
-    shunt = to_shunt;
-    delay(100);  // Wait for INA219 to get new data
 }
 
 inline void meter_undervoltage_lockout()
@@ -271,9 +278,6 @@ void meter_run()
     {
         return;
     }
-
-    // print_reading(7, 4, shunt_voltage_uV);
-    // last_shunt_voltage_uV = shunt_voltage_uV;
 
     meter_check_undervoltage();
 

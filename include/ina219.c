@@ -93,7 +93,6 @@ int32_t INA219_get_power_uW()
 int32_t INA219_get_current_uA()
 {
     return (int16_t)INA219_get_raw_current() * (int32_t)current_uA_LSB;
-    //  -INA219_get_bus_voltage_mV() / 320 - 20;
 }
 
 void INA219_switch_shunt(uint8_t shunt)
