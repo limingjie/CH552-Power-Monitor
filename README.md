@@ -2,6 +2,8 @@
 
 A tiny low-cost voltmeter and ammeter by CH552 & INA219. The meter uses INA219 to measure voltage, current, and power. 3 current sensing shunt resistors are used to measure current from 1 mA to 3.2 A.
 
+![CH552-Power-Monitor](Hardware/CH552-Power-Monitor.png)
+
 ## Current Sensing Shunt Resistors
 
 To increase measurement accuracy in different ranges, 3 current sensing shunt resistors are used, the VCC voltage drop and the shunt resistor power consumption are also controlled.
@@ -46,6 +48,8 @@ CJ3401 is selected consider it satisfied the conditions above and its low cost.
 ![PCB Top](Hardware/CH552-Power-Monitor-Top.png)
 
 ![PCB Bottom](Hardware/CH552-Power-Monitor-Bottom.png)
+
+![PCB Botton 3D](Hardware/CH552-Power-Monitor-3D.png)
 
 ## References
 
