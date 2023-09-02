@@ -1,13 +1,16 @@
+#include <buzzer.h>
 #include <ch554.h>
+#include <encoder.h>
+#include <gpio.h>    // PIN_read(), PIN_input_PU()
+#include <oled.h>    // OLED
 #include <system.h>  // mcu_config()
 #include <time.h>    // millis(), delay()
-#include <oled.h>    // OLED
-#include <buzzer.h>
-#include <encoder.h>
 
 #include "meter.h"
 
-__xdata const uint8_t start_sound[] = {1, C4, 1};
+#define RESET_PIN P34
+
+// __xdata const uint8_t start_sound[] = {1, C4, 1};
 
 __data uint32_t last_system_time = 0;
 
@@ -27,22 +30,21 @@ void startup()
 
 void main()
 {
-    // __xdata char buf[25];
+    PIN_input_PU(RESET_PIN);
 
     startup();
-    buzzer_play(start_sound);
+    // buzzer_play(start_sound);
     meter_display();
 
     while (1)
     {
-        // if (encoder_process())
-        // {
-        //     // TODO: functions
-        //     sprintf(buf, "enc = %3u", encoder_get_delta());
-        //     OLED_printxy(0, 7, buf);
-        // }
+        if (!PIN_read(RESET_PIN))  // Reset button pressed
+        {
+            delay(100);  // Naive debounce, not necessary as it can be reset multiple times.
+            meter_reset();
+        }
 
-        if (millis() - last_system_time >= 50)
+        if (millis() - last_system_time >= 20)  // Refresh every 20ms.
         {
             last_system_time = millis();
             meter_run();

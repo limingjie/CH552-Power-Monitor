@@ -37,6 +37,12 @@ void meter_switch_to_shunt(uint8_t to_shunt)
     delay(100);  // Wait for INA219 to get new data
 }
 
+void meter_reset()
+{
+    max_current_uA = 0;
+    min_current_uA = 0x7FFFFFFF;
+}
+
 void meter_init()
 {
     // Enable shunt 0 by default

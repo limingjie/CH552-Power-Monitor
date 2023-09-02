@@ -5,5 +5,6 @@
 #define SHUNT2_EN P32
 
 void meter_init();
+void meter_reset();
 void meter_display();
 void meter_run();
