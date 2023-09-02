@@ -39,7 +39,7 @@ CJ3401 is selected consider it satisfied the conditions above and its low cost.
 
 ## Schematic
 
-![schematic](Hardware/Schematic_CH552-Power-Meter_2023-03-23.png)
+![schematic](Hardware/Schematic_CH552-Power-Monitor.png)
 
 ## PCB
 
